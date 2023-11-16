@@ -2,7 +2,7 @@ package com.example.salarycalculatorapi.domain.salarycalculator.service;
 
 import java.math.BigDecimal;
 
-public enum ZUS {
+public enum ZUSUoP {
     EMERYTALNA(BigDecimal.valueOf(0.0976)),
     RENTOWA(BigDecimal.valueOf(0.015)),
     CHOROBOWA(BigDecimal.valueOf(0.0245)),
@@ -10,7 +10,7 @@ public enum ZUS {
 
     private final BigDecimal rate;
 
-    ZUS(BigDecimal rate) {
+    ZUSUoP(BigDecimal rate) {
         this.rate = rate;
     }
 

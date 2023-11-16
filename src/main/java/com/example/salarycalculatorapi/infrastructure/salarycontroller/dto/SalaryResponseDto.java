@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 
-public record SalaryUoPResponseDto(
+public record SalaryResponseDto(
         @JsonProperty("Składka Emerytalna") BigDecimal skladkaEmerytalna,
         @JsonProperty("Składka Rentowa") BigDecimal skladkaRentowa,
         @JsonProperty("Składka Chorobowa") BigDecimal skladkaChorobowa,

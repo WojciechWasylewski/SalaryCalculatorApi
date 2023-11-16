@@ -8,7 +8,7 @@ import java.util.Map;
 
 
 @Service
-public class UoPSalaryCalulator {
+public class UoPSalaryCalculator {
     private static final BigDecimal STAWKA_DOLNY_PROG_PODATKOWY = BigDecimal.valueOf(0.12);
     private static final BigDecimal KWOTA_ZMNIEJSZAJACA_PODATEK = BigDecimal.valueOf(300);
     private static final BigDecimal STALA_DLA_DRUGIEGO_PROGU_PODATKOWEGO = BigDecimal.valueOf(900);
@@ -54,20 +54,20 @@ public class UoPSalaryCalulator {
     }
 
     private BigDecimal calculatEmerytalna(BigDecimal salaryBrutto) {
-        return salaryBrutto.multiply(ZUS.EMERYTALNA.getRate());
+        return salaryBrutto.multiply(ZUSUoP.EMERYTALNA.getRate());
     }
 
     private BigDecimal calculateRentowa(BigDecimal salaryBrutto) {
-        return salaryBrutto.multiply(ZUS.RENTOWA.getRate());
+        return salaryBrutto.multiply(ZUSUoP.RENTOWA.getRate());
     }
 
     private BigDecimal calculatChorobowa(BigDecimal salaryBrutto) {
-        return salaryBrutto.multiply(ZUS.CHOROBOWA.getRate());
+        return salaryBrutto.multiply(ZUSUoP.CHOROBOWA.getRate());
     }
 
     private BigDecimal calculatZdrowotna(BigDecimal salaryBrutto) {
         BigDecimal baseValue = salaryBrutto.multiply(BigDecimal.valueOf(0.8629));
-        return baseValue.multiply(ZUS.ZDROWOTNA.getRate());
+        return baseValue.multiply(ZUSUoP.ZDROWOTNA.getRate());
     }
 
     private BigDecimal calculateZaliczkaNaDochodowy(BigDecimal salaryBrutto) {
