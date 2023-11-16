@@ -54,9 +54,9 @@ docker-compose up
 <ul>
   first connect your ide to database <img src="database-connection.png"><li/>
   then use schema.sql to create table employee
-  <li>then run sql command in data.sql to add data to table employee</li>
 </ul>
 <li>RunSpringBootApplication</li>
+<li>then run sql command in data.sql to add data to table employee</li>
 <li>Now you can open your browser and paste this link:</li>
 
 ```
