@@ -11,12 +11,15 @@ import java.util.Map;
 public class UoPSalaryCalculator {
     private static final BigDecimal STAWKA_DOLNY_PROG_PODATKOWY = BigDecimal.valueOf(0.12);
     private static final BigDecimal KWOTA_ZMNIEJSZAJACA_PODATEK = BigDecimal.valueOf(300);
-    private static final BigDecimal STALA_DLA_DRUGIEGO_PROGU_PODATKOWEGO = BigDecimal.valueOf(900);
+    private static final BigDecimal STALA_ROCZNA_DLA_DRUGIEGO_PROGU_PODATKOWEGO = BigDecimal.valueOf(10800);
+    private static final BigDecimal NAJNIZSZA_KRAJOWA = BigDecimal.valueOf(3490);
 
+    private static final BigDecimal STALA_ZUS = BigDecimal.valueOf(0.1371);
+    private static final BigDecimal NUMBER_OF_MONTHS = BigDecimal.valueOf(12);
     private static final BigDecimal STAWKA_GORNY_PROG_PODATKOWY = BigDecimal.valueOf(0.32);
     private static final BigDecimal PROG_PODATKOWY = BigDecimal.valueOf(120000);
+    private static final BigDecimal KWOTA_WOLNA_OD_PODATKU = BigDecimal.valueOf(30000);
     private static final BigDecimal STALA_SUPER_BRUTTO = BigDecimal.valueOf(1.2);
-    private static final BigDecimal KUP = BigDecimal.valueOf(250); // KUP - Koszty uzyskania przychodu
 
 
     public Map<String, BigDecimal> calculateUoP(BigDecimal salaryBrutto) {
@@ -71,25 +74,28 @@ public class UoPSalaryCalculator {
     }
 
     private BigDecimal calculateZaliczkaNaDochodowy(BigDecimal salaryBrutto) {
-        BigDecimal months = BigDecimal.valueOf(12);
-        BigDecimal yearIncome = salaryBrutto.multiply(months);
-        BigDecimal base = calculateBaseForIncomeTax(salaryBrutto);
-        if (yearIncome.compareTo(PROG_PODATKOWY) <= 0) {
-            return base.multiply(STAWKA_DOLNY_PROG_PODATKOWY).subtract(KWOTA_ZMNIEJSZAJACA_PODATEK);
-        } else {
+        BigDecimal yearIncome = salaryBrutto.multiply(NUMBER_OF_MONTHS);
+        if (yearIncome.compareTo(KWOTA_WOLNA_OD_PODATKU) <= 0 || salaryBrutto.compareTo(NAJNIZSZA_KRAJOWA) <= 0) {
+            return BigDecimal.valueOf(0);
+        } else if (yearIncome.compareTo(PROG_PODATKOWY) <= 0 ) {
+            BigDecimal baseValue = calculateBaseForTax(salaryBrutto);
+            BigDecimal baseValueAfterTax = baseValue.multiply(STAWKA_DOLNY_PROG_PODATKOWY);
+            return baseValueAfterTax.subtract(KWOTA_ZMNIEJSZAJACA_PODATEK);
+        }else{
             BigDecimal nadwyzka = yearIncome.subtract(PROG_PODATKOWY);
-            BigDecimal baseYearValue = nadwyzka.multiply(STAWKA_GORNY_PROG_PODATKOWY);
-            BigDecimal baseMonthValue = baseYearValue.divide(BigDecimal.valueOf(12));
-            return baseMonthValue.add(STALA_DLA_DRUGIEGO_PROGU_PODATKOWEGO);
+            BigDecimal yearTax = nadwyzka.multiply(STAWKA_GORNY_PROG_PODATKOWY).add(STALA_ROCZNA_DLA_DRUGIEGO_PROGU_PODATKOWEGO);
+            return yearTax.divide(NUMBER_OF_MONTHS);
+
         }
     }
 
-    public BigDecimal calculateBaseForIncomeTax(BigDecimal salaryBrutto) {
-        BigDecimal zdrowotna = calculatZdrowotna(salaryBrutto);
-        BigDecimal baseValue = salaryBrutto.multiply((BigDecimal.valueOf(0.8629)));
-        return baseValue.subtract(zdrowotna).subtract(KUP);
-    }
 
+    private BigDecimal calculateBaseForTax(BigDecimal salaryBrutto) {
+        BigDecimal zusValue = salaryBrutto.multiply(STALA_ZUS);
+        BigDecimal zdrowotna = calculatZdrowotna(salaryBrutto);
+        return salaryBrutto.subtract(zusValue).subtract(zdrowotna);
+
+    }
 
     public BigDecimal calculateEmployerCost(BigDecimal salaryBrutto) {
 
