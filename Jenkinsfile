@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/WojciechWasylewski/SalaryCalculatorApi.git', branch: 'main'
+                git url: 'https://github.com/WojciechWasylewski/SalaryCalculatorApi.git', branch: 'master'
             }
         }
 
